@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SOURCE_DIR = __dirname;
+const SOURCE_DIR = join(__dirname, '..');  // Go up one level from scripts/
 const DEPLOY_DIR = join(__dirname, '..', 'deployments', 'ai-reasoning-framework');
 
 const FILES_TO_COPY = [
@@ -33,9 +33,49 @@ async function deployFramework() {
   console.log(`Target: ${DEPLOY_DIR}`);
   
   try {
+    // Clean deployment directory first (preserve node_modules)
+    console.log('🧹 Cleaning deployment directory...');
+    
+    // Try to remove with retry for locked files, but preserve node_modules
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    while (retryCount < maxRetries) {
+      try {
+        // Remove everything except node_modules
+        const items = await fs.readdir(DEPLOY_DIR).catch(() => []);
+        
+        for (const item of items) {
+          if (item !== 'node_modules') {
+            const itemPath = join(DEPLOY_DIR, item);
+            await fs.rm(itemPath, { recursive: true, force: true });
+          }
+        }
+        
+        console.log('✅ Deployment directory cleaned (preserved node_modules)');
+        break;
+      } catch (error) {
+        if (error.code === 'EBUSY' || error.code === 'EPERM') {
+          retryCount++;
+          console.log(`⚠️  Files in use, retrying... (${retryCount}/${maxRetries})`);
+          console.log('💡 Make sure to close your MCP client first!');
+          
+          if (retryCount < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+          } else {
+            console.error('❌ Could not clean deployment directory.');
+            console.error('🛑 Please close your MCP client and try again.');
+            process.exit(1);
+          }
+        } else {
+          throw error;
+        }
+      }
+    }
+    
     // Ensure deployment directory exists
     await fs.mkdir(DEPLOY_DIR, { recursive: true });
-    console.log('📁 Created deployment directory');
+    console.log('📁 Created clean deployment directory');
 
     // Copy files
     for (const item of FILES_TO_COPY) {
@@ -58,8 +98,22 @@ async function deployFramework() {
       }
     }
 
-    // Install dependencies in deployment
-    console.log('📦 Installing dependencies...');
+    // Install/update dependencies in deployment
+    const nodeModulesPath = join(DEPLOY_DIR, 'node_modules');
+    let nodeModulesExists = false;
+    
+    try {
+      await fs.access(nodeModulesPath);
+      nodeModulesExists = true;
+    } catch (error) {
+      nodeModulesExists = false;
+    }
+    
+    if (!nodeModulesExists) {
+      console.log('📦 Installing dependencies...');
+    } else {
+      console.log('📦 Updating dependencies...');
+    }
     const { spawn } = await import('child_process');
     
     await new Promise((resolve, reject) => {
