@@ -1,97 +1,230 @@
-# AI Reasoning Framework
+# MCP Agent Planning
 
-## Project Overview
+Transform your AI agents with persistent memory, task tracking, and decision logging. Never lose context again across chat sessions - your AI assistants remember everything and continue exactly where they left off.
 
-A Model Context Protocol (MCP) server that provides persistent, structured state management for agentic AI workflows. This framework solves the fundamental problem of context loss and decision degradation when AI agents work across multiple chat sessions or context windows.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18-brightgreen)](https://nodejs.org/)
+[![MCP Protocol](https://img.shields.io/badge/MCP-v0.5.0-blue)](https://github.com/modelcontextprotocol)
 
-## Problem Statement
+## What Your AI Can Do
 
-Current agentic AI workflows suffer from several critical issues:
+✅ **Remember project context**: *"Continue working on the user auth system we discussed yesterday"*  
+✅ **Track tasks and progress**: *"Show me what tasks are still pending for the API refactor"*  
+✅ **Never repeat decisions**: *"Why did we choose PostgreSQL over MongoDB again?"*  
+✅ **Manage dependencies**: *"What's blocking the frontend deployment?"*  
+✅ **Resume complex workflows**: Switch between chat sessions without losing any context
 
-1. **Context Degradation**: Limited context windows cause agents to lose understanding over time
-2. **Session Discontinuity**: Opening new chat windows results in complete loss of project state and progress
-3. **Decision Regression**: Agents flip-flop on decisions or undo previous work due to lack of persistent decision history
-4. **Unreliable State Management**: Free-form documentation approaches (asking agents to "create docs as needed") result in inconsistent, outdated, or unmaintained state
+## Perfect For
 
-## Solution Approach
+- **Developers** working on long-term projects with multiple AI sessions
+- **Product Managers** tracking features across different conversations  
+- **Teams** that need consistent AI assistance across various contexts
+- **Anyone** tired of re-explaining project context to AI assistants
 
-This framework provides structured, tool-enforced state management through an MCP server that:
+## Quick Start
 
-- **Enforces Consistency**: JSON schemas and validation prevent inconsistent state updates
-- **Enables Seamless Handoffs**: New agents can instantly understand current project status and continue work
-- **Preserves Decisions**: User corrections and architectural choices are permanently logged to prevent regression
-- **Structures Knowledge**: Codebase understanding and task progress are maintained in queryable formats
+Get your AI assistants remembering everything in 2 minutes:
 
-## Core Goals
+### 1. Install
 
-### Primary Objectives
-- Enable agents to persistently maintain project context across sessions
-- Provide structured tools that enforce consistent state management
-- Allow seamless handoffs between different AI agents/sessions
-- Prevent decision regression through structured decision logging
+```bash
+# Try it instantly
+npx mcp-agent-planning
 
-### Secondary Objectives
-- Support multiple simultaneous projects (branch-scoped or project-scoped contexts)
-- Provide queryable project history and decision rationale
-- Enable rollback/recovery of project states
-- Support various development workflows (refactoring, feature development, bug fixes)
+# Or install globally  
+npm install -g mcp-agent-planning
+```
 
-## Architecture Overview
+### 2. Configure Claude Desktop
 
-### MCP Server Tools (Planned)
-- `get_current_context()` - Load existing project state or indicate initialization needed
-- `initialize_context()` - Set up new project with structured schema
-- `query_context()` - Query specific aspects of project state (tasks, decisions, files, etc.)
-- `update_task_status()` - Modify task progress with structured updates
-- `record_decision()` - Log architectural decisions and user preferences
-- `map_relevant_code()` - Maintain understanding of relevant codebase components
+Add this to your Claude Desktop config:
 
-### Data Storage
-- **Backend**: SQLite for structured, queryable storage with schema enforcement
-- **Schema**: JSON-defined schemas for all state types
-- **Scoping**: Branch-based or project-based context isolation
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-### Integration
-- Compatible with any MCP-supporting chat interface (Claude, etc.)
-- IDE-agnostic approach
-- No modification required to existing chat interfaces
+```json
+{
+  "mcpServers": {
+    "agent-planning": {
+      "command": "npx",
+      "args": ["-y", "mcp-agent-planning"]
+    }
+  }
+}
+```
 
-## Development Phases
+### 3. Start Using
 
-### Phase 1: Core MCP Server
-- Basic state initialization and loading
-- Core schema definitions
-- Essential tools: get_current_context, initialize_context, query_context
+Restart Claude Desktop and you'll see "🔗 agent-planning" in the status bar.
 
-### Phase 2: Enhanced State Management
-- Task progression tracking
-- Decision logging and retrieval
-- Codebase mapping capabilities
+Ask your AI assistant:
+- *"Initialize context for my React project in /home/user/my-app"*
+- *"Create a task to implement user authentication"*
+- *"What decisions have we made about the database?"*
 
-### Phase 3: Advanced Features
-- Multi-project support
-- State history and rollback
-- Advanced querying and reporting
+## Usage Examples
 
-### Phase 4: Optimization & Polish
-- Performance optimization
-- Enhanced schemas based on usage patterns
-- Documentation and examples
+### Project Context Management
+```
+"Initialize context for this project. The goal is to build a customer dashboard with React and Node.js. We're focusing on the authentication system first."
 
-## Success Criteria
+"Get current context for this project"
 
-1. **Agent Continuity**: An agent should be able to resume work on any project within 1-2 tool calls, regardless of time elapsed
-2. **Decision Persistence**: User corrections and architectural choices should never be lost or contradicted by future agents
-3. **State Reliability**: Project state should always reflect actual progress accurately
-4. **Workflow Integration**: The framework should integrate seamlessly into existing development workflows without requiring new chat interfaces or IDE changes
+"What tasks are still pending?"
+```
 
-## Meta-Development Approach
+### Task Tracking
+```
+"Create a task: Set up user authentication with JWT tokens"
 
-Once the core MCP server is functional, this project will be developed using its own framework - demonstrating the self-improving nature of structured agentic workflows.
+"Update task AUTH-001 to in-progress status"
 
-## Current Status
+"Show me all blocked tasks and their dependencies"
+```
 
-**Phase**: Planning and Architecture Design  
-**Next Steps**: Begin MCP server implementation with core context management tools  
-**Branch**: main  
-**Last Updated**: August 30, 2025
+### Decision Logging
+```
+"Record decision: We chose PostgreSQL over MongoDB because we need ACID compliance for financial data"
+
+"What architectural decisions have we made about the API structure?"
+```
+
+### File Mapping
+```
+"Map this authentication file - it contains the JWT middleware and user validation functions"
+
+"Show me all mapped files and their importance scores"
+```
+
+## Configuration
+
+### Environment Variables
+- No environment variables required - works out of the box
+- Database stored in project's `.planning/` directory
+- Automatic git branch detection
+
+### Advanced Configuration
+```json
+{
+  "mcpServers": {
+    "agent-planning": {
+      "command": "mcp-agent-planning",
+      "args": [],
+      "env": {
+        "DEBUG": "1"
+      }
+    }
+  }
+}
+```
+
+## How It Works
+
+1. **Project Context**: Initialize once per project/branch with goals and scope
+2. **Persistent Storage**: SQLite database in your project's `.planning/` folder
+3. **Branch Awareness**: Separate contexts for different git branches
+4. **Task Management**: Create, update, and track tasks with dependencies
+5. **Decision Logging**: Record architectural and technical decisions
+6. **File Mapping**: Track important files and their relationships
+
+## Tools Available
+
+| Tool | Description |
+|------|-------------|
+| `get_current_context` | Load existing project context |
+| `initialize_context` | Set up new project with goals and scope |
+| `update_task_status` | Create, update, complete, or delete tasks |
+| `record_decision` | Log decisions to prevent regression |
+| `query_context` | Search tasks, decisions, files, or blockers |
+| `manage_task_dependencies` | Handle task relationships and blocking |
+| `manage_blockers` | Track and resolve project impediments |
+| `map_relevant_code` | Analyze and track important files |
+
+## AI Assistant Compatibility
+
+Works with any MCP-compatible AI assistant:
+- **Claude Desktop** (recommended)
+- **Cursor AI**
+- **Continue.dev** 
+- **Custom MCP clients**
+
+## Troubleshooting
+
+### "No tools available"
+- Restart your AI client after adding the configuration
+- Check that the config file path is correct for your OS
+- Verify JSON syntax in your config file
+
+### "Command not found"
+```bash
+# If npx fails, install globally first
+npm install -g mcp-agent-planning
+```
+
+### "Permission denied"
+```bash
+# On macOS/Linux, you may need to allow execution
+chmod +x /path/to/mcp-agent-planning
+```
+
+### "Database issues" 
+- Check that your project directory is writable
+- The `.planning/` directory will be created automatically
+- Use the `debug_database_location` tool to verify paths
+
+## Examples in Action
+
+### Starting a New Project
+```
+User: "I'm starting a new e-commerce site with Next.js. Help me set up the project structure."
+
+AI: "I'll initialize context for your e-commerce project and help you plan the structure."
+
+→ Uses initialize_context to create persistent project memory
+→ Creates initial tasks for project setup
+→ Records architectural decisions as they're made
+```
+
+### Resuming Work Later
+```
+User: "What were we working on with the payment system?"
+
+AI: "Let me check our project context..."
+
+→ Uses get_current_context to load previous session
+→ Uses query_context to find payment-related tasks and decisions  
+→ Continues exactly where you left off
+```
+
+## Development
+
+```bash
+# Clone and develop
+git clone https://github.com/Narmdo/mcp-agent-planning.git
+cd mcp-agent-planning
+npm install
+
+# Test locally
+npm run dev
+
+# Build for distribution
+npm run build
+```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/Narmdo/mcp-agent-planning/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Narmdo/mcp-agent-planning/discussions)
+
+---
+
+Made with ❤️ for developers who want AI assistants that actually remember things.

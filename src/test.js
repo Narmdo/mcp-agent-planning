@@ -14,6 +14,7 @@ async function testDatabase() {
 
     // Test initialization
     const result = await db.initializeContext({
+      project_path: process.cwd(),
       goal: 'Test project goal',
       scope: 'Testing the framework',
       branch: 'test-branch',
@@ -22,15 +23,15 @@ async function testDatabase() {
     console.log('✅ Context initialized:', result.project_id);
 
     // Test getting context
-    const context = await db.getCurrentContext('test-branch');
+    const context = await db.getCurrentContext(process.cwd(), 'test-branch');
     console.log('✅ Context retrieved:', context ? 'Found' : 'Not found');
 
     // Test querying
-    const summary = await db.queryContext('summary');
+    const summary = await db.queryContext(process.cwd(), 'summary');
     console.log('✅ Query test:', summary.substring(0, 50) + '...');
 
     // Test clearing
-    const clearResult = await db.clearContext('current_project');
+    const clearResult = await db.clearContext(process.cwd(), 'current_project');
     console.log('✅ Clear test:', clearResult.message);
 
     console.log('\\n🎉 All tests passed! MCP server is ready.');

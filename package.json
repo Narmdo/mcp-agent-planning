@@ -1,14 +1,19 @@
 {
-  "name": "ai-reasoning-framework",
+  "name": "mcp-agent-planning",
   "version": "0.1.0",
-  "description": "MCP server for persistent AI agent state management",
-  "main": "src/server.js",
+  "description": "MCP server for AI agent planning, task tracking, and decision logging with persistent context",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-agent-planning": "dist/index.js"
+  },
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node dist/index.js",
+    "build": "node scripts/build.js",
     "dev": "node --watch src/server.js",
     "test": "node src/test.js",
-    "deploy": "node deploy.js"
+    "test:integration": "node scripts/test-integration.js",
+    "debug-db": "node scripts/debug-db.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.5.0",
@@ -17,7 +22,40 @@
   "devDependencies": {
     "@types/node": "^20.0.0"
   },
-  "keywords": ["mcp", "ai", "agent", "context", "state-management"],
-  "author": "",
-  "license": "MIT"
+  "keywords": [
+    "mcp", 
+    "ai", 
+    "agent", 
+    "context", 
+    "state-management",
+    "model-context-protocol",
+    "persistent-state",
+    "agentic-ai",
+    "decision-logging",
+    "task-management"
+  ],
+  "author": {
+    "name": "AI Reasoning Framework Contributors"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Narmdo/mcp-agent-planning.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Narmdo/mcp-agent-planning/issues"
+  },
+  "homepage": "https://github.com/Narmdo/mcp-agent-planning#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "files": [
+    "dist/",
+    "migrations/",
+    "README.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ]
 }
