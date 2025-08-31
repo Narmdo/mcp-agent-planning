@@ -1,6 +1,6 @@
 {
   "name": "mcp-agent-planning",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MCP server for persistent AI agent state management",
   "main": "dist/index.js",
   "bin": {

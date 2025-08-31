@@ -1,13 +1,7 @@
 #!/usr/bin/env node
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { 
-  CallToolRequestSchema, 
-  ListToolsRequestSchema
-} from '@modelcontextprotocol/sdk/types.js';
-
-import { Database } from '../src/database.js';
+// Entry point for mcp-agent-planning - redirects to the actual server
+import '../src/server.js';
 
 class MCPAgentPlanningServer {
   constructor() {
