@@ -2,9 +2,9 @@
   "name": "mcp-agent-planning",
   "version": "0.2.1",
   "description": "MCP server for persistent AI agent state management",
-  "main": "dist/index.js",
+  "main": "src/server.js",
   "bin": {
-    "mcp-agent-planning": "dist/index.js"
+    "mcp-agent-planning": "src/server.js"
   },
   "type": "module",
   "scripts": {
@@ -21,8 +21,6 @@
     "@types/node": "^20.0.0"
   },
   "files": [
-    "index.js",
-    "dist/",
     "src/",
     "migrations/",
     "README.md",
