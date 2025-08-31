@@ -1,5 +1,5 @@
 {
-  "name": "ai-reasoning-framework",
+  "name": "mcp-agent-planning",
   "version": "0.1.0",
   "description": "MCP server for persistent AI agent state management",
   "main": "src/server.js",
